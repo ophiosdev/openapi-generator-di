@@ -24,3 +24,8 @@ repos:
       - id: yamllint
         args:
           - --strict
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.4
+    hooks:
+      - id: actionlint-docker
