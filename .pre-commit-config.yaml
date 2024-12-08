@@ -1,0 +1,26 @@
+---
+repos:
+  - repo: 'https://github.com/pre-commit/pre-commit-hooks'
+    rev: 'v5.0.0'
+    hooks:
+      - id: 'check-added-large-files'
+      - id: 'fix-byte-order-marker'
+      - id: 'check-case-conflict'
+      - id: 'check-json'
+      - id: 'end-of-file-fixer'
+        exclude: '.*\.mustache$'
+      - id: 'trailing-whitespace'
+        exclude: '.*\.mustache$'
+      - id: 'mixed-line-ending'
+      - id: 'check-merge-conflict'
+      - id: 'no-commit-to-branch'
+        args:
+          - '--branch'
+          - 'master'
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args:
+          - --strict
