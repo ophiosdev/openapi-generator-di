@@ -15,13 +15,12 @@ using {{packageName}}.Attributes;
 using {{modelPackage}};
 
 namespace {{apiPackage}}
-{ {{#operations}}
+{ {{#operations}}{{#description}}
     /// <summary>
     /// {{description}}
-    /// </summary>{{#description}}
+    /// </summary>
     [Description("{{.}}")]{{/description}}
-    [ApiController]
-    public {{#classModifier}}{{.}} {{/classModifier}}class {{classname}}Controller : ControllerBase
+    public interface I{{classname}}
     { {{#operation}}
         /// <summary>
         /// {{summary}}
@@ -30,6 +29,23 @@ namespace {{apiPackage}}
         /// <param name="{{paramName}}">{{description}}{{#isDeprecated}} (deprecated){{/isDeprecated}}</param>{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}
         /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>{{/operationIsAsync}}{{/operationResultTask}}{{#responses}}
         /// <response code="{{code}}">{{message}}</response>{{/responses}}
+        public {{#operationIsAsync}}async {{/operationIsAsync}}{{#operationResultTask}}Task<{{/operationResultTask}}IActionResult{{#operationResultTask}}>{{/operationResultTask}} {{operationId}}({{#allParams}}{{&dataType}} {{paramName}}{{^-last}}, {{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}});
+        {{/operation}}
+    }
+{{/operations}}
+
+  {{#operations}}
+    [ApiController]
+    public {{#classModifier}}{{.}} {{/classModifier}}class {{classname}}Controller : ControllerBase
+    {
+        private I{{classname}} _impl;
+
+        public {{classname}}Controller(I{{classname}} implementation)
+        {
+            _impl = implementation;
+        }
+
+{{#operation}}
         [{{httpMethod}}]
         [Route("{{{basePathWithoutHost}}}{{{path}}}")]
 {{#authMethods}}
@@ -47,35 +63,11 @@ namespace {{apiPackage}}
         {{#isDeprecated}}
         [Obsolete]
         {{/isDeprecated}}
-        public {{operationModifier}} {{#operationResultTask}}{{#operationIsAsync}}async {{/operationIsAsync}}Task<{{/operationResultTask}}IActionResult{{#operationResultTask}}>{{/operationResultTask}} {{operationId}}({{#allParams}}{{>params/pathParam}}{{>params/queryParam}}{{>params/bodyParam}}{{>params/formParam}}{{>params/headerParam}}{{^-last}}{{^isCookieParam}}, {{/isCookieParam}}{{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}}){{^generateBody}};{{/generateBody}}
-        {{#generateBody}}
+        public {{#operationIsAsync}}async {{/operationIsAsync}}{{#operationResultTask}}Task<{{/operationResultTask}}IActionResult{{#operationResultTask}}>{{/operationResultTask}} {{operationId}}({{#allParams}}{{>params/pathParam}}{{>params/queryParam}}{{>params/bodyParam}}{{>params/formParam}}{{>params/headerParam}}{{^-last}}{{^isCookieParam}}, {{/isCookieParam}}{{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}})
         {
-            {{#cookieParams}}
-            var {{paramName}} = Request.Cookies["{{paramName}}"];
-            {{/cookieParams}}
-
-{{#responses}}
-{{#dataType}}
-            //TODO: Uncomment the next line to return response {{code}} or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode({{code}}, default({{&dataType}}));
-{{/dataType}}
-{{^dataType}}
-            //TODO: Uncomment the next line to return response {{code}} or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode({{code}});
-{{/dataType}}
-{{/responses}}
-{{#returnType}}
-            string exampleJson = null;
-            {{#examples}}
-            exampleJson = "{{{example}}}";
-            {{/examples}}
-            {{#isListCollection}}{{>returns/listReturn}}{{/isListCollection}}{{^isListCollection}}{{#isMap}}{{>returns/mapReturn}}{{/isMap}}{{^isMap}}{{>returns/objectReturn}}{{/isMap}}{{/isListCollection}}
-            {{!TODO: defaultResponse, examples, auth, consumes, produces, nickname, externalDocs, imports, security}}
-            //TODO: Change the data returned
-            return {{#operationResultTask}}{{#operationIsAsync}}await {{/operationIsAsync}}Task.FromResult<IActionResult>({{/operationResultTask}}new ObjectResult(example){{#operationResultTask}}){{/operationResultTask}};{{/returnType}}{{^returnType}}
-            throw new NotImplementedException();{{/returnType}}
+            {{#returnType}}return {{/returnType}}{{#operationIsAsync}}await {{/operationIsAsync}}_impl.{{operationId}}({{#allParams}}{{paramName}}{{^-last}}{{^isCookieParam}}, {{/isCookieParam}}{{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}})
         }
-        {{/generateBody}}
+
         {{/operation}}
     }
 {{/operations}}
