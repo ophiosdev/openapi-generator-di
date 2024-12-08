@@ -1,0 +1,11 @@
+---
+extends: default
+
+rules:
+  truthy:
+    allowed-values:
+      - 'on'
+      - 'yes'
+      - 'true'
+      - 'false'
+    check-keys: true
