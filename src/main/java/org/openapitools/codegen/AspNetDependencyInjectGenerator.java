@@ -47,7 +47,6 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
     public static final String ASPNET_CORE_VERSION       = "aspnetCoreVersion";
     public static final String OPERATION_IS_ASYNC        = "operationIsAsync";
     public static final String OPERATION_RESULT_TASK     = "operationResultTask";
-    public static final String GENERATE_BODY             = "generateBody";
     public static final String TARGET_FRAMEWORK          = "targetFramework";
     public static final String MODEL_CLASS_MODIFIER      = "modelClassModifier";
 
@@ -62,7 +61,7 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
     private String projectSdk               = SDK_LIB;
     private String compatibilityVersion     = "Version_2_2";
     private boolean operationIsAsync        = true;
-    private boolean operationResultTask     = true;
+    private boolean operationResultTask     = false;
 
     protected CliOption aspnetCoreVersion = new CliOption(ASPNET_CORE_VERSION, "ASP.NET Core version: 9.0, 8.0, 7.0, 6.0 (deprecated)");
     private CliOption modelClassModifier = new CliOption(MODEL_CLASS_MODIFIER, "Model Class Modifier can be nothing or partial");
@@ -304,7 +303,7 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
         additionalProperties.put(PROJECT_SDK, projectSdk);
 
         if (!additionalProperties.containsKey(CodegenConstants.API_PACKAGE)) {
-            apiPackage = packageName + ".Controllers";
+            apiPackage = packageName;
             additionalProperties.put(CodegenConstants.API_PACKAGE, apiPackage);
         }
 
