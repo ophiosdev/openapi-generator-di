@@ -1,0 +1,5 @@
+{
+  "[mustache]": {
+      "files.insertFinalNewline": false
+  }
+}
