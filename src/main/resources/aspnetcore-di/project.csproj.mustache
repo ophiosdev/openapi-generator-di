@@ -3,7 +3,7 @@
     <Description>{{packageDescription}}{{^packageDescription}}{{packageName}}{{/packageDescription}}</Description>
     {{#packageCopyright}}<Copyright>{{.}}</Copyright>{{/packageCopyright}}
     {{#packageAuthors}}<Authors>{{.}}</Authors>{{/packageAuthors}}
-    <TargetFramework>{{targetFramework}}</TargetFramework>
+    <TargetFramework>net{{aspnetCoreVersion}}</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     {{#packageVersion}}<Version>{{.}}</Version>{{/packageVersion}}
@@ -19,7 +19,6 @@
 {{#useSeparateModelProject}}
     <ProjectReference Include="../{{modelPackage}}/{{modelPackage}}.csproj"/>
 {{/useSeparateModelProject}}
-    <PackageReference Include="Microsoft.AspNetCore.App" />
 {{^useSeparateModelProject}}
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="{{aspnetCoreVersion}}.0"/>
 {{/useSeparateModelProject}}
