@@ -47,11 +47,11 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
     public static final String ASPNET_CORE_VERSION       = "aspnetCoreVersion";
     public static final String OPERATION_IS_ASYNC        = "operationIsAsync";
     public static final String OPERATION_RESULT_TASK     = "operationResultTask";
-    public static final String TARGET_FRAMEWORK          = "targetFramework";
     public static final String MODEL_CLASS_MODIFIER      = "modelClassModifier";
     public static final String CREATE_PROJECT_FILE       = "createProjectFile";
 
     public static final String PROJECT_SDK = "projectSdk";
+    public static final String SDK_WEB     = "Microsoft.NET.Sdk.Web";
     public static final String SDK_LIB     = "Microsoft.NET.Sdk";
 
     @Setter private String packageGuid = "{" + randomUUID().toString().toUpperCase(Locale.ROOT) + "}";
@@ -59,9 +59,8 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
 
     private boolean pocoModels              = false;
     private boolean useSeparateModelProject = false;
-    private String projectSdk               = SDK_LIB;
-    private String compatibilityVersion     = "Version_2_2";
-    private boolean operationIsAsync        = true;
+    private String projectSdk               = SDK_WEB;
+    private boolean operationIsAsync        = false;
     private boolean operationResultTask     = false;
     private boolean createProjectFile       = false;
 
@@ -322,7 +321,7 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
             additionalProperties.put(CodegenConstants.MODEL_PACKAGE, modelPackage);
         }
 
-        setFramework();
+        setAspnetCoreVersion();
 
         supportingFiles.add(new SupportingFile("validateModel.mustache", "Attributes", "ValidateModelStateAttribute.cs"));
         supportingFiles.add(new SupportingFile("typeExtensions.mustache", "Extensions", "TypeExtensions.cs"));
@@ -493,7 +492,7 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
         }
     }
 
-    private void setAspnetCoreVersion(String packageFolder) {
+    private void setAspnetCoreVersion() {
         setCliOption(aspnetCoreVersion);
     }
 
@@ -522,31 +521,9 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
         } else {
             additionalProperties.put(OPERATION_IS_ASYNC, operationIsAsync);
         }
-    }
-
-    private void setFramework() throws IllegalArgumentException {
-        if (aspnetCoreVersion.getOptValue().startsWith("6.")) {
-            LOGGER.warn(
-                    "ASP.NET core version is {} so changing to use frameworkReference instead of packageReference ",
-                    aspnetCoreVersion.getOptValue());
-            additionalProperties.put(TARGET_FRAMEWORK, "net6.0");
-        } else if (aspnetCoreVersion.getOptValue().startsWith("7.")) {
-            LOGGER.warn(
-                    "ASP.NET core version is {} so changing to use frameworkReference instead of packageReference ",
-                    aspnetCoreVersion.getOptValue());
-            additionalProperties.put(TARGET_FRAMEWORK, "net7.0");
-        } else if (aspnetCoreVersion.getOptValue().startsWith("8.")) {
-            LOGGER.warn(
-                    "ASP.NET core version is {} so changing to use frameworkReference instead of packageReference ",
-                    aspnetCoreVersion.getOptValue());
-            additionalProperties.put(TARGET_FRAMEWORK, "net8.0");
-        } else if (aspnetCoreVersion.getOptValue().startsWith("9.")) {
-            LOGGER.warn(
-                    "ASP.NET core version is {} so changing to use frameworkReference instead of packageReference ",
-                    aspnetCoreVersion.getOptValue());
-            additionalProperties.put(TARGET_FRAMEWORK, "net9.0");
-        } else {
-            throw new IllegalArgumentException("Unsupported ASP.NET core version: " + aspnetCoreVersion.getOptValue());
+        if (operationIsAsync) {
+            operationResultTask = true;
+            additionalProperties.put(OPERATION_RESULT_TASK, operationResultTask);
         }
     }
 
