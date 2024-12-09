@@ -49,6 +49,7 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
     public static final String OPERATION_RESULT_TASK     = "operationResultTask";
     public static final String TARGET_FRAMEWORK          = "targetFramework";
     public static final String MODEL_CLASS_MODIFIER      = "modelClassModifier";
+    public static final String CREATE_PROJECT_FILE       = "createProjectFile";
 
     public static final String PROJECT_SDK = "projectSdk";
     public static final String SDK_LIB     = "Microsoft.NET.Sdk";
@@ -62,6 +63,7 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
     private String compatibilityVersion     = "Version_2_2";
     private boolean operationIsAsync        = true;
     private boolean operationResultTask     = false;
+    private boolean createProjectFile       = false;
 
     protected CliOption aspnetCoreVersion = new CliOption(ASPNET_CORE_VERSION, "ASP.NET Core version: 9.0, 8.0, 7.0, 6.0 (deprecated)");
     private CliOption modelClassModifier = new CliOption(MODEL_CLASS_MODIFIER, "Model Class Modifier can be nothing or partial");
@@ -202,6 +204,10 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
                 "Set methods result to Task<> (default).",
                 operationResultTask);
 
+        addSwitch(CREATE_PROJECT_FILE,
+            "Create a project file for the generated api files.",
+            createProjectFile);
+
         modelClassModifier.setType("String");
         modelClassModifier.addEnum("", "Keep model class default with no modifier");
         modelClassModifier.addEnum("partial", "Make model class partial");
@@ -293,6 +299,10 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
             userSecretsGuid = (String) additionalProperties.get("userSecretsGuid");
         }
 
+        if (additionalProperties.containsKey(CREATE_PROJECT_FILE)) {
+            createProjectFile = convertPropertyToBooleanAndWriteBack(CREATE_PROJECT_FILE);
+        }
+
         // Check for the modifiers etc.
         // The order of the checks is important.
         setModelClassModifier();
@@ -321,6 +331,10 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
 
         supportingFiles.add(new SupportingFile("apiAuthentication.mustache", "Authentication", "ApiAuthentication.cs"));
         supportingFiles.add(new SupportingFile("inputFormatterStream.mustache", "Formatters", "InputFormatterStream.cs"));
+
+        if (createProjectFile) {
+            supportingFiles.add(new SupportingFile("project.csproj.mustache", "Project.csproj"));
+        }
 
         setTypeMapping();
     }
