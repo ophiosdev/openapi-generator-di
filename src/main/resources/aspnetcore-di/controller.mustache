@@ -29,7 +29,7 @@ namespace {{apiPackage}}
         /// <param name="{{paramName}}">{{description}}{{#isDeprecated}} (deprecated){{/isDeprecated}}</param>{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}
         /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>{{/operationIsAsync}}{{/operationResultTask}}{{#responses}}
         /// <response code="{{code}}">{{message}}</response>{{/responses}}
-        public {{#operationResultTask}}Task<{{/operationResultTask}}IActionResult{{#operationResultTask}}>{{/operationResultTask}} {{operationId}}({{#allParams}}{{&dataType}} {{paramName}}{{^-last}}, {{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}});
+        public {{>returnType}} {{operationId}}({{#allParams}}{{&dataType}} {{paramName}}{{^-last}}, {{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}});
         {{/operation}}
     }
 {{/operations}}
@@ -63,9 +63,15 @@ namespace {{apiPackage}}
         {{#isDeprecated}}
         [Obsolete]
         {{/isDeprecated}}
-        public {{#operationIsAsync}}async {{/operationIsAsync}}{{#operationResultTask}}Task<{{/operationResultTask}}IActionResult{{#operationResultTask}}>{{/operationResultTask}} {{operationId}}({{#allParams}}{{>params/pathParam}}{{>params/queryParam}}{{>params/bodyParam}}{{>params/formParam}}{{>params/headerParam}}{{^-last}}{{^isCookieParam}}, {{/isCookieParam}}{{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}})
+        public {{#operationIsAsync}}async {{/operationIsAsync}}{{>returnType}} {{operationId}}({{#allParams}}{{>params/pathParam}}{{>params/queryParam}}{{>params/bodyParam}}{{>params/formParam}}{{>params/headerParam}}{{^-last}}{{^isCookieParam}}, {{/isCookieParam}}{{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}})
         {
-            return {{#operationIsAsync}}await {{/operationIsAsync}}_impl.{{operationId}}({{#allParams}}{{paramName}}{{^-last}}{{^isCookieParam}}, {{/isCookieParam}}{{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}});
+            {{#cookieParams}}
+            var {{paramName}} = Request.Cookies["{{paramName}}"];
+            {{#-last}}
+
+            {{/-last}}
+            {{/cookieParams}}
+            return {{#operationIsAsync}}await {{/operationIsAsync}}_impl.{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}});
         }
 
         {{/operation}}
