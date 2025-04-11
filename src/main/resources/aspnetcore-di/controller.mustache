@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
+{{#excludeFromCodeCoverage}}
+using System.Diagnostics.CodeAnalysis;
+{{/excludeFromCodeCoverage}}
 
 using {{packageName}}.Attributes;
 using {{modelPackage}};
@@ -36,6 +39,9 @@ namespace {{apiPackage}}
 
   {{#operations}}
     [ApiController]
+    {{#excludeFromCodeCoverage}}
+    [ExcludeFromCodeCoverage]
+    {{/excludeFromCodeCoverage}}
     public {{#classModifier}}{{.}} {{/classModifier}}class {{classname}}Controller : ControllerBase
     {
         private I{{classname}} _impl;

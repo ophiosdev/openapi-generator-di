@@ -3,10 +3,16 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Formatters;
+{{#excludeFromCodeCoverage}}
+using System.Diagnostics.CodeAnalysis;
+{{/excludeFromCodeCoverage}}
 
 namespace {{packageName}}.Formatters
 {
     /// <inheritdoc />
+    {{#excludeFromCodeCoverage}}
+    [ExcludeFromCodeCoverage]
+    {{/excludeFromCodeCoverage}}
     public class InputFormatterStream : InputFormatter
     {
         /// <inheritdoc />
