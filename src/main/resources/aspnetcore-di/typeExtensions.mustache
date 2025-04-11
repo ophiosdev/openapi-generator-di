@@ -2,12 +2,18 @@
 using System;
 using System.Linq;
 using System.Text;
+{{#excludeFromCodeCoverage}}
+using System.Diagnostics.CodeAnalysis;
+{{/excludeFromCodeCoverage}}
 
 namespace {{packageName}}.OpenApi
 {
     /// <summary>
     /// Replacement utilities from Swashbuckle.AspNetCore.SwaggerGen which are not in 5.x
     /// </summary>
+    {{#excludeFromCodeCoverage}}
+    [ExcludeFromCodeCoverage]
+    {{/excludeFromCodeCoverage}}
     public static class TypeExtensions
     {
         /// <summary>
