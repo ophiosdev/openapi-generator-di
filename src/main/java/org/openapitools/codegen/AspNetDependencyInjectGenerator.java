@@ -49,6 +49,7 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
     public static final String OPERATION_RESULT_TASK     = "operationResultTask";
     public static final String MODEL_CLASS_MODIFIER      = "modelClassModifier";
     public static final String CREATE_PROJECT_FILE       = "createProjectFile";
+    public static final String EXCLUDE_FROM_CODECOVERAGE = "excludeFromCodeCoverage";
 
     public static final String PROJECT_SDK = "projectSdk";
     public static final String SDK_WEB     = "Microsoft.NET.Sdk.Web";
@@ -63,6 +64,7 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
     private boolean operationIsAsync        = false;
     private boolean operationResultTask     = false;
     private boolean createProjectFile       = false;
+    private boolean excludeFromCodeCoverage = false;
 
     protected CliOption aspnetCoreVersion = new CliOption(ASPNET_CORE_VERSION, "ASP.NET Core version: 9.0, 8.0, 7.0, 6.0 (deprecated)");
     private CliOption modelClassModifier = new CliOption(MODEL_CLASS_MODIFIER, "Model Class Modifier can be nothing or partial");
@@ -300,6 +302,10 @@ public class AspNetDependencyInjectGenerator extends AbstractCSharpCodegen {
 
         if (additionalProperties.containsKey(CREATE_PROJECT_FILE)) {
             createProjectFile = convertPropertyToBooleanAndWriteBack(CREATE_PROJECT_FILE);
+        }
+
+        if (additionalProperties.containsKey(EXCLUDE_FROM_CODECOVERAGE)) {
+            excludeFromCodeCoverage = convertPropertyToBooleanAndWriteBack(EXCLUDE_FROM_CODECOVERAGE);
         }
 
         // Check for the modifiers etc.
