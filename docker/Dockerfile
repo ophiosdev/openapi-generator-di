@@ -1,8 +1,8 @@
-ARG BASE_VERSION=v7.10.0
+ARG BASE_VERSION=v7.12.0
 FROM openapitools/openapi-generator-cli:${BASE_VERSION}
 
 ARG GENERATOR_DIR=/opt/openapi-generator/modules/openapi-generator-cli/target
-ARG GENERATOR_VERSION=1.0.0
+ARG GENERATOR_VERSION=1.1.0
 
 COPY --chmod=555 docker/scripts/docker-entrypoint.sh /usr/local/bin/
 RUN ln -s /usr/local/bin/docker-entrypoint.sh /usr/local/bin/openapi-generator
