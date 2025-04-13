@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <name>openapi-generator-di</name>
     <description>OpenAPI Generator extension providing generators that use the dependency injection pattern</description>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <build>
         <plugins>
             <plugin>
@@ -36,12 +36,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12</version>
                 <configuration>
-                    <systemProperties>
+                    <systemPropertyVariables>
                         <property>
                             <name>loggerPath</name>
                             <value>conf/log4j.properties</value>
                         </property>
-                    </systemProperties>
+                    </systemPropertyVariables>
                     <argLine>-Xms512m -Xmx1500m</argLine>
                     <parallel>methods</parallel>
                     <forkMode>pertest</forkMode>
@@ -127,7 +127,7 @@
         <!--
             If you update openapi-generator-version ensure you change the Dockerfile as well
         -->
-        <openapi-generator-version>7.10.0</openapi-generator-version>
+        <openapi-generator-version>7.12.0</openapi-generator-version>
         <maven-plugin-version>1.0.0</maven-plugin-version>
         <junit-version>4.13.2</junit-version>
     </properties>
