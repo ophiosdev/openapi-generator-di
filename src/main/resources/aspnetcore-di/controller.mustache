@@ -77,7 +77,7 @@ namespace {{apiPackage}}
 
             {{/-last}}
             {{/cookieParams}}
-            return {{#operationIsAsync}}await {{/operationIsAsync}}_impl.{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}CancellationToken cancellationToken{{/operationIsAsync}}{{/operationResultTask}});
+            return {{#operationIsAsync}}await {{/operationIsAsync}}_impl.{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{#-last}}{{#operationResultTask}}{{#operationIsAsync}}, {{/operationIsAsync}}{{/operationResultTask}}{{/-last}}{{/allParams}}{{#operationResultTask}}{{#operationIsAsync}}cancellationToken{{/operationIsAsync}}{{/operationResultTask}});
         }
 
         {{/operation}}
