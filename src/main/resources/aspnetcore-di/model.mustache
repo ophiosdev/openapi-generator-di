@@ -108,7 +108,7 @@ namespace {{modelPackage}}
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object{{#nullableReferenceTypes}}?{{/nullableReferenceTypes}} obj)
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -120,7 +120,7 @@ namespace {{modelPackage}}
         /// </summary>
         /// <param name="other">Instance of {{classname}} to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals({{classname}} other)
+        public bool Equals({{classname}}{{#nullableReferenceTypes}}?{{/nullableReferenceTypes}} other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -160,12 +160,12 @@ namespace {{modelPackage}}
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==({{classname}} left, {{classname}} right)
+        public static bool operator ==({{classname}}{{#nullableReferenceTypes}}?{{/nullableReferenceTypes}} left, {{classname}}{{#nullableReferenceTypes}}?{{/nullableReferenceTypes}} right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=({{classname}} left, {{classname}} right)
+        public static bool operator !=({{classname}}{{#nullableReferenceTypes}}?{{/nullableReferenceTypes}} left, {{classname}}{{#nullableReferenceTypes}}?{{/nullableReferenceTypes}} right)
         {
             return !Equals(left, right);
         }
