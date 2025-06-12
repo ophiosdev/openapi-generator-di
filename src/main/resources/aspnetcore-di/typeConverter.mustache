@@ -3,20 +3,14 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text.Json;
-{{#excludeFromCodeCoverage}}
-using System.Diagnostics.CodeAnalysis;
-{{/excludeFromCodeCoverage}}
 
-{{#excludeFromCodeCoverage}}
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-{{/excludeFromCodeCoverage}}
 namespace {{packageName}}.Converters
 {
     /// <summary>
     /// Custom string to enum converter
     /// </summary>
     {{#excludeFromCodeCoverage}}
-    [ExcludeFromCodeCoverage]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     {{/excludeFromCodeCoverage}}
     public class CustomEnumConverter<T> : TypeConverter
     {
