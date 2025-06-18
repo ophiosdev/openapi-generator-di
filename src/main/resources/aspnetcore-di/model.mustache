@@ -56,14 +56,15 @@ namespace {{modelPackage}}
         /// </summary>{{#description}}
         /// <value>{{.}}</value>{{/description}}{{#example}}
         /* <example>{{.}}</example> */{{/example}}{{#required}}
-        [Required]{{/required}}{{#pattern}}
+        [Required]{{^aspnetCoreVersion6}}
+        [JsonRequired]{{/aspnetCoreVersion6}}{{/required}}{{#pattern}}
         [RegularExpression("{{{.}}}")]{{/pattern}}{{#minLength}}{{#maxLength}}
         [StringLength({{maxLength}}, MinimumLength={{minLength}})]{{/maxLength}}{{/minLength}}{{#minLength}}{{^maxLength}}
         [MinLength({{minLength}})]{{/maxLength}}{{/minLength}}{{^minLength}}{{#maxLength}}
         [MaxLength({{.}})]{{/maxLength}}{{/minLength}}{{#minimum}}{{#maximum}}
         [Range({{minimum}}, {{maximum}})]{{/maximum}}{{/minimum}}
-        [DataMember(Name="{{baseName}}", EmitDefaultValue={{#isNullable}}true{{/isNullable}}{{^isNullable}}{{#vendorExtensions.x-is-value-type}}true{{/vendorExtensions.x-is-value-type}}{{^vendorExtensions.x-is-value-type}}false{{/vendorExtensions.x-is-value-type}}{{/isNullable}})]
-        [JsonPropertyName("{{baseName}}"){{^isNullable}}{{#nullableReferenceTypes}}, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull){{/nullableReferenceTypes}}{{^nullableReferenceTypes}}{{#vendorExtensions.x-is-reference-type}}, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull){{/vendorExtensions.x-is-reference-type}}{{/nullableReferenceTypes}}{{/isNullable}}]
+        [DataMember(Name="{{baseName}}", EmitDefaultValue={{#isNullable}}true{{/isNullable}}{{^isNullable}}{{#required}}false{{/required}}{{^required}}{{#vendorExtensions.x-is-value-type}}{{#defaultValue}}true{{/defaultValue}}{{^defaultValue}}false{{/defaultValue}}{{/vendorExtensions.x-is-value-type}}{{^vendorExtensions.x-is-value-type}}false{{/vendorExtensions.x-is-value-type}}{{/required}}{{/isNullable}})]
+        [JsonPropertyName("{{baseName}}"){{#nullableReferenceTypes}}{{^isContainer}}{{^required}}{{^isNullable}}, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull){{/isNullable}}{{/required}}{{/isContainer}}{{/nullableReferenceTypes}}{{^nullableReferenceTypes}}{{#vendorExtensions.x-is-reference-type}}{{^isNullable}}{{^required}}, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull){{/required}}{{/isNullable}}{{/vendorExtensions.x-is-reference-type}}{{#vendorExtensions.x-is-value-type}}{{^required}}, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault){{/required}}{{/vendorExtensions.x-is-value-type}}{{/nullableReferenceTypes}}]
         {{#isEnum}}
         public {{{datatypeWithEnum}}}{{#isNullable}}?{{/isNullable}} {{name}} { get; set; }{{#defaultValue}} = {{{.}}};{{/defaultValue}}
         {{/isEnum}}
