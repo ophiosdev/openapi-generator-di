@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Redocly Museum API
   description: Imaginary, but delightful Museum API for interacting with museum services and information. Built with love by Redocly.
-  version: 1.2.1
+  version: 1.2.2
   termsOfService: 'https://redocly.com/subscription-agreement/'
   contact:
     email: team@redocly.com
@@ -399,6 +399,8 @@ components:
             - boolean
           description: Indicates if the event has VIP access.
           example: false
+        status:
+          $ref: "#/components/schemas/EventStatus"
       required:
         - name
         - location
@@ -419,6 +421,15 @@ components:
         title:
           type: string
           example: Validation failed
+    EventStatus:
+      type: string
+      description: Status of the special event.
+      enum:
+        - upcoming
+        - cancelled
+        - completed
+      example: upcoming
+      default: upcoming
 
   securitySchemes:
     MuseumPlaceholderAuth:
