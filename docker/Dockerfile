@@ -1,4 +1,4 @@
-ARG BASE_VERSION=v7.27.0
+ARG BASE_VERSION=v7.28.0
 FROM openapitools/openapi-generator-cli:${BASE_VERSION}
 
 ARG GENERATOR_DIR=/opt/openapi-generator/modules/openapi-generator-cli/target
